@@ -2,6 +2,14 @@
 
 This repository includes some of the code from my msc thesis, restructured to make it easier to use.
 
+## Setting up environment
+
+The python packages that are needed to run can be found in `environment.yml`. You can use conda/mamba to set it up, e.g. by running:
+
+```
+micromamba create -f environment.yml
+```
+
 ## Retrieval using trained model
 
 ### Steps:

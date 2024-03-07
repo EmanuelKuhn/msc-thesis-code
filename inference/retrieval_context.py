@@ -14,6 +14,8 @@ class RetrievalContext(Protocol):
 class EmbeddingsRetrievalContext(RetrievalContext):
     def __init__(self, features: typing.Dict[str, torch.Tensor]):
         self.ids_all = features["id"].numpy()
+
+        # Normalize to length 1, so that L2 distance becomes the same as inverse cosine similarity
         self.embeddings_all = (features["pred"] / features["pred"].norm(dim=1, keepdim=True)).numpy()    
 
         self.ds = datasets.Dataset.from_dict({"id": self.ids_all})
@@ -49,7 +51,9 @@ class EmbeddingsRetrievalContext(RetrievalContext):
         return filtered_retrievals
     
 
-    def retrieve_by_embedding(self, query_embeddings, top_k=50) -> np.ndarray:
+    def retrieve_by_embedding(self, query_embeddings: torch.Tensor, top_k=50) -> np.ndarray:
+        
+        query_embeddings = (query_embeddings / query_embeddings.norm(dim=1, keepdim=True)).numpy()
 
         batch_results = self.ds.search_batch("embedding", query_embeddings, k=top_k+1)
         

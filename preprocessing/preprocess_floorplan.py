@@ -17,7 +17,7 @@ class PreprocessingFloorplan(RplanWrapper):
         try:
             return FloorPlan.from_rplan_data(self.load_rplanpy_data(rplan_id))
         except:
-            return None
+            raise ValueError(f"Failed to process {rplan_id=}; This method does not support the full split.")
     
     @staticmethod
     def render_rgb_image(fp: FloorPlan):

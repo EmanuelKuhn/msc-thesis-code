@@ -20,5 +20,8 @@ dependencies:
   - pip
   - omegaconf
   - scipy=1.10.1
+  - wandb
+  - lightning
+  - faiss
   - pip:
     - rplanpy

@@ -1,6 +1,7 @@
 import dataclasses
 import os
 from pathlib import Path
+import sys
 import typing
 
 from omegaconf import OmegaConf, MISSING
@@ -20,6 +21,7 @@ from preprocessing.preprocessess_rplanpy import PreprocessingCategory, Preproces
 import datasets
 
 from preprocessing.preprocess_floorplan import PreprocessingFloorplan
+
 
 class PreprocessingStyle(Enum):
     CONSISTENT_WALL_THICKNESS_RGB = "ds_rplan_processed_geometry_rgb"
@@ -44,7 +46,17 @@ class Config:
     save_datasets_path: str = "data/processed/"
 
 
+def print_help(config_cls):
+    print("Configuration options (option=default):")
+    for field in config_cls.__dataclass_fields__.values():
+        print(f"    {field.name}={field.default}")
+
+
 def main():
+
+    if "--help" in sys.argv:
+        print_help(Config)
+        sys.exit()
 
     conf = OmegaConf.structured(Config)
     conf.merge_with_cli()

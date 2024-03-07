@@ -112,7 +112,7 @@ def main():
     conf.merge_with_cli()
     conf = typing.cast(Config, conf)
 
-
+    # Check all fields are set
     for field in dataclasses.fields(Config):
         getattr(conf, field.name)
 

@@ -60,6 +60,10 @@ def model_huggingface_url_to_preprocessing_style(huggingface_url) -> Preprocessi
         return PreprocessingStyle.RPLANPY
     elif huggingface_url == "ekuhn/ds_rplanpy_category":
         return PreprocessingStyle.CATEGORY_CHANNEL
+    elif huggingface_url == "ekuhn/ds_full_categories_passages":
+        return PreprocessingStyle.CONSISTENT_WALL_THICKNESS_RGB
+    elif huggingface_url == "ekuhn/ds_splits_ordinal_ids":
+        return PreprocessingStyle.CONSISTENT_WALL_THICKNESS_RGB
     else:
         raise ValueError(f"Unmapped {huggingface_url=}")
 
@@ -93,8 +97,16 @@ def save_features(wandb_prefix, wandb_model_ref, split, save_datasets_path, feat
 
     torch.save(features, features_cache_folder / "feats.pth")
 
+def print_help(config_cls):
+    print("Configuration options (option=default):")
+    for field in config_cls.__dataclass_fields__.values():
+        print(f"    {field.name}={field.default}")
+
 
 def main():
+    if "--help" in sys.argv:
+        print_help(Config)
+        sys.exit()
 
     conf = OmegaConf.structured(Config)
     conf.merge_with_cli()

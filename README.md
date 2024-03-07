@@ -1,6 +1,10 @@
-# Thesis code
+# Exploring Training Pair-Generation Strategies for Deep Metric Learning for Floor Plan Retrieval
 
-This repository includes some of the code from my msc thesis, restructured to make it easier to use.
+This repository includes some of the code from my thesis about floor plan retrieval, refactored to make it easier to use.
+
+Thesis report: [Exploring Training Pair-Generation Strategies for Deep Metric Learning for Floor Plan Retrieval](http://resolver.tudelft.nl/uuid:68d3f999-c6f6-45ca-8209-d70a1fa00ef5)
+
+Currently includes the code to download already trained models from wandb, and use them to retrieve similar floor plan images.
 
 ## Setting up environment
 
@@ -13,12 +17,14 @@ micromamba create -f environment.yml
 ## Retrieval using trained model
 
 ### Steps:
-- Prepare images
-    - Download RPLAN dataset
-    - Perform preprocessing
-- Download model
-- Predict embeddings
-- Use embeddings for retrieval
+1. Prepare images
+    1. Download RPLAN dataset
+    2. Perform preprocessing
+3. Download model
+4. Predict embeddings
+5. Use embeddings for retrieval
+
+The [`retrieval-examples.ipynb`](retrieval-examples.ipynb) notebook also shows the relevant commands to run.
 
 ### Download RPLAN dataset:
 Download RPLAN from: http://staff.ustc.edu.cn/~fuxm/projects/DeepLayout/index.html#sec_Downloads. You have to fill in a Google form to request access from the authors who published the RPLAN dataset.
@@ -64,4 +70,8 @@ The report showed that GED <=2 pairs generally performed best. The CONSISTENT_WA
 
 ### Retrieval
 
-The `retrieval-examples.ipynb` shows how to retrieve similar floor plans from the dataset. Either by speciying the id of an rplan image, or by a (potentially new) image.
+The `retrieval-examples.ipynb` shows how to retrieve similar floor plans from the dataset. By either:
+- retrieving by rplan id
+- prodiving an image to use as query
+
+Additionally, the notebook shows what command to run for preprocessing the data and predicting features.

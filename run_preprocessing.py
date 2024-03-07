@@ -6,15 +6,9 @@ import typing
 
 from omegaconf import OmegaConf, MISSING
 
-import omegaconf
-
-from enum import Enum, auto
-
-import rplanpy
+from enum import Enum
 
 from pathlib import Path
-
-from tqdm.contrib.concurrent import process_map
 
 from preprocessing.preprocessess_rplanpy import PreprocessingCategory, PreprocessingRplanpy
 
@@ -22,6 +16,7 @@ import datasets
 
 from preprocessing.preprocess_floorplan import PreprocessingFloorplan
 
+import pandas as pd
 
 class PreprocessingStyle(Enum):
     CONSISTENT_WALL_THICKNESS_RGB = "ds_rplan_processed_geometry_rgb"
@@ -35,9 +30,9 @@ class PreprocessingStyle(Enum):
 @dataclasses.dataclass
 class Config:
     
-    # splits: str =  "data/splits/"
+    splits: str =  "data/splits/"
     
-    # split: str =  "val"
+    split: str =  "val"
 
     method: PreprocessingStyle=MISSING
 
@@ -62,13 +57,13 @@ def main():
     conf.merge_with_cli()
     conf = typing.cast(Config, conf)
 
+    # Check all fields are set
     for field in dataclasses.fields(Config):
-        print(field)
         getattr(conf, field.name)
 
-    ids = list(range(1000))
+    split = datasets.NamedSplit(conf.split)
 
-    split = datasets.NamedSplit("debugging")
+    ids = pd.read_csv(f"data/splits/{split._name}.csv")["id"].tolist()
 
     if conf.method == PreprocessingStyle.CATEGORY_CHANNEL:
         preprocessing = PreprocessingCategory(conf.rplan_dataset_path)
